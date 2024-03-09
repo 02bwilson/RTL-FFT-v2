@@ -15,4 +15,4 @@ class Plot(AbstractWidget):
         self.layout.addWidget(self.graph_widget, 0, 0)
 
     def plot(self, xdata, ydata):
-        self.plotLine.setData(ydata, xdata)
+        self.plotLine.setData(xdata , ydata)
