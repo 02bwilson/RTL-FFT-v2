@@ -78,6 +78,6 @@ class SDRManager(QObject):
 
 
             # Send to plot
-            self.new_data.emit(freq_list[tp:], self.iir_data[tp:])
+            self.new_data.emit(freq_list, self.iir_data)
 
 
