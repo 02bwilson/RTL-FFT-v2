@@ -59,6 +59,9 @@ class MainWindow(QMainWindow):
         self.sdr_manager.new_data.connect(self.plot.plot)
 
         # SDR Settings
+        self.sdr_settings.freq_changed.connect(self.sdr_manager.sdr.set_center_freq)
         self.sdr_settings.ss_start.connect(self.sdr_manager.start_gather_data)
         self.sdr_settings.ss_stop.connect(self.sdr_manager.stop_gather_data)
         self.sdr_settings.gain_changed.connect(self.sdr_manager.sdr.set_gain)
+        self.sdr_settings.iir_alpha_changed.connect(self.sdr_manager.set_iir_alpha)
+        self.sdr_settings.sr_changed.connect(self.sdr_manager.sdr.set_sample_rate)
