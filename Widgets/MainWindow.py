@@ -5,9 +5,10 @@ import PySide6QtAds as QtAds
 from PySide6QtAds import CDockManager, CDockWidget
 
 from Managers.SDRManager import SDRManager
-from Widgets.Configuration import Configuration
-from Widgets.PlotWidget import Plot
-from Widgets.SDRSettings import SDRSettings
+from Widgets.ConfigurationWidget import Configuration
+from Widgets.FFTPlotWidget import FFTPlot
+from Widgets.IQPlotWidget import IQPlot
+from Widgets.SDRSettingsWidget import SDRSettings
 
 
 class MainWindow(QMainWindow):
@@ -24,14 +25,23 @@ class MainWindow(QMainWindow):
         # Create Dock Widgets
         self.dock_manager = CDockManager(self)
 
-        self.plot_dock_widget = CDockWidget("Plot")
-        self.plot = Plot()
-        self.plot_dock_widget.setWidget(self.plot)
-        self.plot_dock_widget.setIcon(QPixmap("../Images/chart.png"))
+        self.fft_plot_dock_widget = CDockWidget("FFT Plot")
+        self.fft_plot = FFTPlot()
+        self.fft_plot_dock_widget.setWidget(self.fft_plot)
+        self.fft_plot_dock_widget.setIcon(QPixmap("../Images/chart.png"))
 
-        self.menuBar().addAction(self.plot_dock_widget.toggleViewAction())
+        self.menuBar().addAction(self.fft_plot_dock_widget.toggleViewAction())
 
-        self.dock_manager.addDockWidget(QtAds.DockWidgetArea.TopDockWidgetArea, self.plot_dock_widget)
+        self.dock_manager.addDockWidget(QtAds.DockWidgetArea.TopDockWidgetArea, self.fft_plot_dock_widget)
+
+        self.iq_plot_dock_widget = CDockWidget("IQ Plot")
+        self.iq_plot = IQPlot()
+        self.iq_plot_dock_widget.setWidget(self.iq_plot)
+        self.iq_plot_dock_widget.setIcon(QPixmap("../Images/chart.png"))
+
+        self.menuBar().addAction(self.iq_plot_dock_widget.toggleViewAction())
+
+        self.dock_manager.addDockWidget(QtAds.DockWidgetArea.BottomDockWidgetArea, self.iq_plot_dock_widget)
 
         self.sdr_settings_dock_widget = CDockWidget("SDR Settings")
         self.sdr_settings = SDRSettings()
@@ -56,7 +66,8 @@ class MainWindow(QMainWindow):
 
     def create_connections(self):
         # SDR Data
-        self.sdr_manager.new_data.connect(self.plot.plot)
+        self.sdr_manager.new_fft_data.connect(self.fft_plot.plot)
+        self.sdr_manager.new_iq_data.connect(self.iq_plot.plot)
 
         # SDR Settings
         self.sdr_settings.freq_changed.connect(self.sdr_manager.sdr.set_center_freq)

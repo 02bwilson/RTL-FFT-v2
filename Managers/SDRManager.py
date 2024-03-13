@@ -12,8 +12,8 @@ from scipy.interpolate import make_interp_spline
 from scipy.signal import resample_poly, firwin, bilinear, lfilter
 
 class SDRManager(QObject):
-    new_data = QSignal(list, list)
-
+    new_fft_data = QSignal(list, list)
+    new_iq_data = QSignal(list)
     def __init__(self):
         super().__init__()
 
@@ -62,10 +62,13 @@ class SDRManager(QObject):
 
             # Read samples
             samples = self.sdr.read_samples(2048)
+
+            self.new_iq_data.emit(samples)
+
             samples = fft.fft(samples)
             samples = samples[1:]
             samples = fft.fftshift(samples)
-            samples = [10 * log((s.real * s.real) + (s.imag * s.imag)) for s in samples]
+            samples = [10 * log(10 * ((s.real * s.real) + (s.imag * s.imag))) for s in samples]
 
 
             # Send throgh IIR Filter
@@ -78,6 +81,6 @@ class SDRManager(QObject):
 
 
             # Send to plot
-            self.new_data.emit(freq_list, self.iir_data)
+            self.new_fft_data.emit(freq_list, self.iir_data)
 
 

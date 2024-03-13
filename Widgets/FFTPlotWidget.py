@@ -10,7 +10,7 @@ class PW(pg.PlotItem):
 
     def setAxisItems(self, axisItems):
         pg.PlotItem.setAxisItems(self, axisItems)
-class Plot(AbstractWidget):
+class FFTPlot(AbstractWidget):
 
     def __init__(self):
         AbstractWidget.__init__(self)
