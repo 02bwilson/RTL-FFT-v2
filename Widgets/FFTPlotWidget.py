@@ -1,3 +1,8 @@
+"""
+FFTPlotWidget.py
+
+Bryce W, 2024
+"""
 import pyqtgraph as pg
 pg.setConfigOptions(antialias=True)
 from Widgets.AbstractWidget import AbstractWidget

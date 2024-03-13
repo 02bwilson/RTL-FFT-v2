@@ -1,3 +1,8 @@
+"""
+MainWindow.py
+
+Bryce W, 2024
+"""
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QMainWindow
 
@@ -70,9 +75,17 @@ class MainWindow(QMainWindow):
         self.sdr_manager.new_iq_data.connect(self.iq_plot.plot)
 
         # SDR Settings
-        self.sdr_settings.freq_changed.connect(self.sdr_manager.sdr.set_center_freq)
         self.sdr_settings.ss_start.connect(self.sdr_manager.start_gather_data)
         self.sdr_settings.ss_stop.connect(self.sdr_manager.stop_gather_data)
+
+        self.sdr_settings.freq_changed.connect(self.sdr_manager.sdr.set_center_freq)
+        self.sdr_settings.freq_correction_changed.connect(self.sdr_manager.sdr.set_freq_correction)
+        self.sdr_settings.sr_changed.connect(self.sdr_manager.sdr.set_sample_rate)
+        self.sdr_settings.bw_changed.connect(self.sdr_manager.sdr.set_bandwidth)
         self.sdr_settings.gain_changed.connect(self.sdr_manager.sdr.set_gain)
+        self.sdr_settings.agc_changed.connect(self.sdr_manager.sdr.set_agc_mode)
+        self.sdr_settings.bias_tee_changed.connect(self.sdr_manager.sdr.set_bias_tee)
+        self.sdr_settings.direct_sampling_changed.connect(self.sdr_manager.sdr.set_direct_sampling)
+
         self.sdr_settings.iir_alpha_changed.connect(self.sdr_manager.set_iir_alpha)
         self.sdr_settings.sr_changed.connect(self.sdr_manager.sdr.set_sample_rate)

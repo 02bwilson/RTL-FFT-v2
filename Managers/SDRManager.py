@@ -1,29 +1,37 @@
+"""
+SDRManager.py
+
+Bryce W, 2024
+"""
 import threading
 import time
 
-from PySide6.QtCore import QObject, Signal as QSignal, QThread
+from PySide6.QtCore import QObject, Signal as QSignal, QTimer
 
 from rtlsdr import RtlSdr
 
 from numpy import fft, log
-import numpy as np
-from scipy.interpolate import make_interp_spline
 
-from scipy.signal import resample_poly, firwin, bilinear, lfilter
 
 class SDRManager(QObject):
     new_fft_data = QSignal(list, list)
     new_iq_data = QSignal(list)
+
     def __init__(self):
         super().__init__()
 
         self.sdr = RtlSdr()
 
         # Set default settings
-        self.sdr.set_gain(10)
-        self.sdr.set_bandwidth(1.024e3)
+
         self.sdr.set_center_freq(103.1e6)
-        self.sdr.set_sample_rate(1024e3)
+        self.sdr.set_freq_correction(1)
+        self.sdr.set_sample_rate(1.024e6)
+        self.sdr.set_bandwidth(200000)
+        self.sdr.set_gain(0)
+        self.sdr.set_agc_mode(False)
+        self.sdr.set_bias_tee(False)
+        self.sdr.set_direct_sampling(False)
 
         self.iir_data = []
 
@@ -68,8 +76,10 @@ class SDRManager(QObject):
             samples = fft.fft(samples)
             samples = samples[1:]
             samples = fft.fftshift(samples)
-            samples = [10 * log(10 * ((s.real * s.real) + (s.imag * s.imag))) for s in samples]
-
+            try:
+                samples = [10 * log(10 * ((s.real * s.real) + (s.imag * s.imag))) for s in samples]
+            except RuntimeWarning:
+                return
 
             # Send throgh IIR Filter
             if len(self.iir_data) == 0:
@@ -79,8 +89,5 @@ class SDRManager(QObject):
                     oma = 1 - self.alpha
                     self.iir_data[idx] = s * oma + self.iir_data[idx] * self.alpha
 
-
             # Send to plot
             self.new_fft_data.emit(freq_list, self.iir_data)
-
-

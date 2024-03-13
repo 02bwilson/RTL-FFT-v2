@@ -1,3 +1,8 @@
+"""
+IQPlotWidget.py
+
+Bryce W, 2024
+"""
 import pyqtgraph as pg
 pg.setConfigOptions(antialias=True)
 from Widgets.AbstractWidget import AbstractWidget
@@ -23,8 +28,8 @@ class IQPlot(AbstractWidget):
 
         self.layout.addWidget(self.graph_widget, 0, 0)
 
-        self.graph_widget.setXRange(.03, -.03)
-        self.graph_widget.setYRange(.03, -.03)
+        self.graph_widget.setXRange(.05, -.05)
+        self.graph_widget.setYRange(.05, -.05)
 
 
     def plot(self, data):

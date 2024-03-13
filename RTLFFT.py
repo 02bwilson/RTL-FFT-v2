@@ -1,3 +1,8 @@
+"""
+RTLFFT.py
+
+Bryce W, 2024
+"""
 import sys
 
 from PySide6.QtWidgets import QApplication

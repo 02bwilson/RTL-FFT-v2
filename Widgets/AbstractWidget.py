@@ -1,3 +1,8 @@
+"""
+AbstractWidget.py
+
+Bryce W, 2024
+"""
 from PySide6.QtWidgets import QWidget, QGridLayout
 
 class AbstractWidget(QWidget):
