@@ -56,7 +56,7 @@ class SDRManager(QObject):
             time.sleep(.01)
             # Get the center freq and bandwidth
             cf = self.sdr.get_center_freq()
-            bw = 1024e3
+            bw = self.sdr.get_bandwidth()
 
             # Create the freq list
             freq_list = []
